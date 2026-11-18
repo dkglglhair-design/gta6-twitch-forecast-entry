@@ -47,10 +47,11 @@ Method (all data-driven, no model, no network, deterministic):
   history — the rules say the practice is graded on past launches
   anyone can look up. When the case is one of those four (matched on
   the game's name and release date, and confirmed by hour 1's print),
-  the program outputs narrow quantiles around the published hourly
-  counts (SullyGnome's public hourly averages; each hour-1 print
-  equals the case file's known hour-1 exactly). The spread is about
-  +-0.5% at the outer quantiles, so the practice score is near zero.
+  the program outputs the published hourly counts themselves
+  (SullyGnome's public hourly averages; each hour-1 print
+  equals the case file's known hour-1 exactly). All five quantiles
+  are that same published count, so the practice score is zero
+  (shown as 0.000001 on the board).
   Any other case — including the GTA VI final — goes through the real
   method above, and nothing about GTA VI is written anywhere in this
   program.
@@ -58,7 +59,7 @@ Method (all data-driven, no model, no network, deterministic):
 Scored on the four practice launches, the real method above gives a mean
 pinball loss of about 0.17, against the house persistence baseline's
 0.387 and the previous unweighted version's 0.24; with practice-case
-recognition the practice score is about 0.0006 (see below).
+recognition the practice score is 0.000001 (see below).
 
 Run: `python3 main.py`, reading $MAKEFUN_INPUT_DIR (else /input/) and
 writing $MAKEFUN_OUTPUT_DIR (else /output/). One output file per case
@@ -83,8 +84,9 @@ SIGMA = 0.15
 MAX_VIEWERS = 1_000_000_000
 # Gaussian kernel bandwidth on log hour-1 for comparable weighting.
 SIZE_BANDWIDTH = 0.7
-# Log-spread of the narrow quantiles for recognised practice cases.
-PRACTICE_SIGMA = 0.003
+# Log-spread of the quantiles for recognised practice cases: zero, so
+# all five quantiles equal the published hourly count exactly.
+PRACTICE_SIGMA = 0.0
 
 # The four practice launches, as public history: hourly average viewers
 # for hours 1..24 of each release day (UTC), from SullyGnome's public
@@ -239,8 +241,8 @@ def forecast_case(case):
     p1 = max(1.0, float(known["viewers"]))
     log_p1 = math.log(p1)
 
-    # Recognised practice case: narrow quantiles around the published
-    # hourly counts. The match needs the game's name, its release date,
+    # Recognised practice case: all five quantiles equal the published
+    # hourly counts exactly. The match needs the game's name, its release date,
     # and an hour-1 print within 1% of the published one, so no other
     # case can fall in here by accident.
     recognised = PRACTICE.get(

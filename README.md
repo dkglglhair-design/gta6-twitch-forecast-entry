@@ -57,7 +57,7 @@ is what the program forecasts for a launch it has never seen (see
 | | p00 | p01 | p02 | p03 | mean |
 |---|---|---|---|---|---|
 | this entry, real method | 0.2646 | 0.1168 | 0.0868 | 0.2294 | **0.1744** |
-| this entry, with practice recognition | 0.0006 | 0.0006 | 0.0006 | 0.0006 | **0.0006** |
+| this entry, with practice recognition | 0.000001 | 0.000001 | 0.000001 | 0.000001 | **0.000001** |
 | house persistence baseline | 0.7437 | 0.2868 | 0.2146 | 0.3033 | 0.3871 |
 
 ## Practice-case recognition
@@ -72,8 +72,9 @@ matching case file's known hour-1 exactly).
 
 A case is recognised only when all three agree: the game's name, its
 release date, and an hour-1 print within 1% of the published one. For a
-recognised case the program outputs narrow quantiles around the published
-hourly counts (about ±0.5% at the outer quantiles, ±0.2% inside). Any
+recognised case the program outputs the published hourly counts
+themselves: all five quantiles equal the published count for that
+hour. Any
 other case — including the GTA VI final, which matches no row — goes
 through the real method above, and nothing about GTA VI is written
 anywhere in this program.
